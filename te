@@ -1,0 +1,148 @@
+#!/bin/sh
+
+#   ______                    _             __
+#  /_  __/__  _________ ___  (_)___  ____ _/ /
+#   / / / _ \/ ___/ __ `__ \/ / __ \/ __ `/ /
+#  / / /  __/ /  / / / / / / / / / / /_/ / /
+# /_/  \___/_/  /_/ /_/ /_/_/_/ /_/\__,_/_/
+#     ______           __
+#    / ____/_ ______  / /___  ________  _____
+#   / __/ | |/_/ __ \/ / __ \/ ___/ _ \/ ___/
+#  / /____>  </ /_/ / / /_/ / /  /  __/ /
+# /_____/_/|_/ .___/_/\____/_/   \___/_/
+#           /_/
+
+# File:         te
+# Description:  Terminal explorer
+# Author:       NNB
+#               └─ https://github.com/NNBnh
+# URL:          https://github.com/NNBnh/terminal-explorer
+# License:      GPLv3
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+# Values
+TMPDIR="${TMPDIR:-/tmp}"
+
+ACTIONS="${1:-p}"
+REGISTER="${ACTIONS#?}"
+ACTION="${ACTIONS%$REGISTER}"
+DATAS="${@#$ACTIONS}"
+
+[ -z "$DATAS" ] && DATAS=$(</dev/stdin) &
+
+TERMINALEXPLORER_CLIPBOARD_SET_COMMAND=wl-copy
+TERMINALEXPLORER_CLIPBOARD_GET_COMMAND=wl-paste
+CLIPBOARD_SET_COMMAND="${TERMINALEXPLORER_CLIPBOARD_SET_COMMAND:-xclip -in  -selection clipboard}"
+CLIPBOARD_GET_COMMAND="${TERMINALEXPLORER_CLIPBOARD_GET_COMMAND:-xclip -out -selection clipboard}"
+
+COPY_COMMAND="${TERMINALEXPLORER_COPY_COMMAND:-cp}"
+CUT_COMMAND="${TERMINALEXPLORER_CUT_COMMAND:-mv}"
+
+TEMPORARY="${BFM_TEMPORARY:-$TMPDIR/terminal-explorer}"
+
+if [ -z "$REGISTER" ]; then
+	mkdir -p "$TEMPORARY" && ACTION_PATH="$TEMPORARY/action"
+else
+	mkdir -p "$TEMPORARY/actions" && ACTION_PATH="$TEMPORARY/actions/$REGISTER"
+	mkdir -p "$TEMPORARY/registers"
+fi
+
+
+# Functions
+clipboard_files() {
+	FILES_PATH=$(realpath $DATAS | sed -e "s/^/file:\/\/$(hostname)/g" -e 's/$/\r/g')
+
+	if [ -z "$REGISTER" ]; then
+		eval "$CLIPBOARD_SET_COMMAND \"\$FILES_PATH\""
+	else
+		printf "$FILES_PATH" > "$TEMPORARY/registers/$REGISTER"
+	fi
+
+	printf '%s' "$1" > "$ACTION_PATH"
+}
+
+move_files() {
+	for path in ${DATAS:-.}; do
+		if [ -z "$REGISTER" ]; then
+			FILES_PATH_RAW=$(eval "$CLIPBOARD_GET_COMMAND")
+		else
+			FILES_PATH_RAW=$(< "$TEMPORARY/registers/$REGISTER")
+		fi
+
+		[ "$1" = "$CUT_COMMAND" ] && [ -e "$ACTION_PATH" ] && rm "$ACTION_PATH"
+
+		printf "$FILES_PATH_RAW" | sed -e 's/^file:\/\/[^\/]*\//\//g' -e 's/\r$//g' > "$TEMPORARY/files_path"
+
+		while IFS= read -r file_path || [ -n "$file_path" ]; do
+			[ ! -e "$file_path" ] && {
+				printf '%s' "te: '$file_path': No such file or directory"
+
+				exit 1
+			}
+		done < "$TEMPORARY/files_path"
+
+		while IFS= read -r file_path || [ -n "$file_path" ]; do
+			file_base=$(basename "$file_path")
+			file_move="$file_base"
+
+			i='1'
+
+			while [ -e "$path/$file_move" ]; do
+				i=$(( i + 1 ))
+
+				file_move="$file_base ($i)"
+			done
+
+			eval "$1 \"\$file_path\" \"\$path/\$file_move\""
+
+			DATAS="${DATAS:+$DATAS
+}$file_move"
+		done < "$TEMPORARY/files_path"
+
+		[ "$1" = "$CUT_COMMAND" ] && clipboard_files 'copy'
+	done
+}
+
+
+# Start
+case "$ACTION" in
+	[cy]) clipboard_files 'copy'     ;;
+	[xd]) clipboard_files 'cut'      ;;
+	[ls]) clipboard_files 'symlink'  ;;
+	 'h') clipboard_files 'hardlink' ;;
+	[CY]) move_files "$COPY_COMMAND" ;;
+	[XD]) move_files "$CUT_COMMAND"  ;;
+	[LS]) move_files 'ln -s'         ;;
+	 'H') move_files 'ln'            ;;
+	[vpVP])
+		case $(< "$ACTION_PATH") in
+			'cut')      MOVE_COMMAND="$CUT_COMMAND"  ;;
+			'symlink')  MOVE_COMMAND="ln -s"         ;;
+			'hardlink') MOVE_COMMAND="ln"            ;;
+			*)          MOVE_COMMAND="$COPY_COMMAND" ;;
+		esac
+
+		move_files "$MOVE_COMMAND"
+	;;
+	*)
+		printf "help"
+
+		exit 1
+	;;
+esac
+
+
+exit 0
