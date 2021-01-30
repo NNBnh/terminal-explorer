@@ -1,18 +1,23 @@
-<h1 align="center"><code>terminal-explorer</code></h1>
-<p align="center"> that <i>SuperB</i></p>
-<p align="center"><img src="https://img.shields.io/github/license/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=for-the-badge" alt="License: GPL-3.0"> <img src="https://img.shields.io/github/languages/top/NNBnh/terminal-explorer?logo=gnu-bash&labelColor=073551&color=4EAA25&logoColor=FFFFFF&style=for-the-badge" alt="Shell: 100%"> </p>
+<h1 align="center"><i>Terminal Explorer</i></h1>
+<p align="center">Bring file manager's copy/paste to the CLI</p>
+<p align="center"><img src="https://img.shields.io/github/license/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=for-the-badge" alt="License: GPL-3.0"> <img src="https://img.shields.io/github/languages/top/NNBnh/terminal-explorer?logo=gnu-bash&labelColor=073551&color=4EAA25&logoColor=FFFFFF&style=for-the-badge" alt="Shell: 100%"> <img src="https://img.shields.io/github/last-commit/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=for-the-badge"></p>
 <p align="center"><img src="https://img.shields.io/github/watchers/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=flat-square"> <img src="https://img.shields.io/github/stars/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=flat-square"> <img src="https://img.shields.io/github/forks/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=flat-square"> <img src="https://img.shields.io/github/issues/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=flat-square"></p>
 
 ## About
-`terminal-explorer` is *SuperB*
+**Terminal explorer** is a files manager tool that mimic the way GUI's file manager do copy/cut/paste.
+
+## Features
 
 ## Contents
 - [About](#about)
+- [Features](#features)
 - [Contents](#contents)
 - [Setup](#setup)
   - [Dependencies](#dependencies)
   - [Installation](#installation)
 - [Usage](#usage)
+- [Configuration](#configuration)
+- [Credits](#credits)
 
 ## Setup
 ### Dependencies
@@ -41,8 +46,30 @@ ln -s ~/.local/share/terminal-explorer/te ~/.local/bin/te
 Run `te` in the terminal:
 
 ```sh
-te
+te ACTION[REGISTER] FILES
 ```
+
+Or:
+
+```sh
+te PASTE[REGISTER] FILES
+```
+
+## Configuration
+Terminal explorer is configured through environment variables: `export TERMINALEXPLORER_<SETTING>="<value>"`
+
+|Value|Invalid|Default|Description|
+|-|-|-|-|
+|`CLIPBOARD_SET_COMMAND`|`<commands>`|`xclip -in -selection clipboard`|Command to set the clipboard|
+|`CLIPBOARD_GET_COMMAND`|`<commands>`|`xclip -out -selection clipboard`|Command to get the clipboard|
+|`TERMINALEXPLORER_COPY_COMMAND`|`<commands>`|`cp`|Command to copy files|
+|`TERMINALEXPLORER_CUT_COMMAND`|`<commands>`|`mv`|Command to cut files|
+|||||
+|`TERMINALEXPLORER_TEMPORARY`|`<path/to/file>`|`/tmp/bfetch`|Temporary file's location|
+
+## Credits
+Special thanks to:
+- [**Pure sh bible**](https://github.com/dylanaraps/pure-sh-bible) also by [Dylan](https://github.com/dylanaraps)
 
 <br><br><br><br>
 
