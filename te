@@ -37,21 +37,25 @@
 TMPDIR="${TMPDIR:-/tmp}"
 
 ACTIONS="${1:-p}"
-REGISTER="${ACTIONS#?}"
 ACTION="${ACTIONS%$REGISTER}"
 DATAS="${@#$ACTIONS}"
 
 [ -z "$DATAS" ] && DATAS=$(</dev/stdin) &
 
-TERMINALEXPLORER_CLIPBOARD_SET_COMMAND=wl-copy
-TERMINALEXPLORER_CLIPBOARD_GET_COMMAND=wl-paste
+REGISTER="${ACTIONS#?}"
+
+case "$REGISTER" in
+	*'/'*)
+		printf '%s' "te: '$REGISTER': register's name mustn't include '/'"
+		exit 1
+	;;
+esac
+
+TEMPORARY="${TERMINALEXPLORER_TEMPORARY:-$TMPDIR/terminal-explorer}"
 CLIPBOARD_SET_COMMAND="${TERMINALEXPLORER_CLIPBOARD_SET_COMMAND:-xclip -in  -selection clipboard}"
 CLIPBOARD_GET_COMMAND="${TERMINALEXPLORER_CLIPBOARD_GET_COMMAND:-xclip -out -selection clipboard}"
-
 COPY_COMMAND="${TERMINALEXPLORER_COPY_COMMAND:-cp}"
 CUT_COMMAND="${TERMINALEXPLORER_CUT_COMMAND:-mv}"
-
-TEMPORARY="${BFM_TEMPORARY:-$TMPDIR/terminal-explorer}"
 
 if [ -z "$REGISTER" ]; then
 	mkdir -p "$TEMPORARY" && ACTION_PATH="$TEMPORARY/action"
@@ -122,11 +126,11 @@ case "$ACTION" in
 	[cy]) clipboard_files 'copy'     ;;
 	[xd]) clipboard_files 'cut'      ;;
 	[ls]) clipboard_files 'symlink'  ;;
-	 'h') clipboard_files 'hardlink' ;;
+	'h')  clipboard_files 'hardlink' ;;
 	[CY]) move_files "$COPY_COMMAND" ;;
 	[XD]) move_files "$CUT_COMMAND"  ;;
 	[LS]) move_files 'ln -s'         ;;
-	 'H') move_files 'ln'            ;;
+	'H')  move_files 'ln'            ;;
 	[vpVP])
 		case $(< "$ACTION_PATH") in
 			'cut')      MOVE_COMMAND="$CUT_COMMAND"  ;;
@@ -138,9 +142,43 @@ case "$ACTION" in
 		move_files "$MOVE_COMMAND"
 	;;
 	*)
-		printf "help"
+		if [ "$ACTIONS" = '--help' ] || [ "$ACTIONS" = '-h' ]; then
+			printf "\033[1mTerminal explorer\033[0m is a files manager tool that
+mimic the way GUI's file manager do copy/cut/paste.
 
-		exit 1
+\033[1mUsage:\033[0m
+    te ACTION[REGISTER] FILES
+    te PASTE[REGISTER] [PATH]
+
+\033[1mACTION:\033[0m
+  c, y          copy FILES into REGISTER's clipboard and set paste's action to copy
+  x, d          copy FILES into REGISTER's clipboard and set paste's action to cut
+  l, s          copy FILES into REGISTER's clipboard and set paste's action to symlink
+  h             copy FILES into REGISTER's clipboard and set paste's action to hardlink
+
+\033[1mPASTE:\033[0m
+  v, V, p, P    paste FILES from REGISTER's clipboard,
+  C, Y          ignore paste's action, copy     FILES from REGISTER's clipboard to PATH
+  X, D          ignore paste's action, cut      FILES from REGISTER's clipboard to PATH
+  L, S          ignore paste's action, symlink  FILES from REGISTER's clipboard to PATH
+  H             ignore paste's action, hardlink FILES from REGISTER's clipboard to PATH
+
+\033[1mPATH\033[0m by default is \$PWD.
+
+\033[1mREGISTER\033[0m if leave empty will use system clipboard,
+otherwise it's name can be anything that doesn't include '/'.
+
+\033[1mExamples:\033[0m
+    te x foo
+    te ctest bar
+    te p
+    te ptest"
+		else
+			printf "te: invalid actions -- '$ACTIONS'
+Try 'te --help' for more information."
+
+			exit 1
+		fi
 	;;
 esac
 
