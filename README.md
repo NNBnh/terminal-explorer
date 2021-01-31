@@ -60,7 +60,7 @@ te ACTION[REGISTER] FILES
 Or:
 
 ```sh
-te PASTE[REGISTER] [PATH]
+te PASTE[REGISTER]
 ```
 
 ```console
@@ -74,12 +74,10 @@ ACTION:
 ```console
 PASTE:
   v, V, p, P    paste FILES from REGISTER's clipboard,
-  C, Y          ignore paste's action, copy     FILES from REGISTER's clipboard to PATH
-  X, D          ignore paste's action, cut      FILES from REGISTER's clipboard to PATH
-  L, S          ignore paste's action, symlink  FILES from REGISTER's clipboard to PATH
-  H             ignore paste's action, hardlink FILES from REGISTER's clipboard to PATH
-
-PATH by default is $PWD.
+  C, Y          ignore paste's action, copy     FILES from REGISTER's clipboard
+  X, D          ignore paste's action, cut      FILES from REGISTER's clipboard
+  L, S          ignore paste's action, symlink  FILES from REGISTER's clipboard
+  H             ignore paste's action, hardlink FILES from REGISTER's clipboard
 ```
 
 ```console
@@ -149,7 +147,6 @@ export TERMINALEXPLORER_CUT_COMMAND='rsync --recursive --archive -hh --partial -
 ## Credits
 Special thanks to:
 - [**File URI Specification**](https://www.freedesktop.org/wiki/Specifications/file-uri-spec) by [Freedesktop.org](https://www.freedesktop.org)
-- [**Desktop Trash Can Specification**](https://www.freedesktop.org/wiki/Specifications/trash-spec) also by [Freedesktop.org](https://www.freedesktop.org)
 
 <br><br><br><br>
 

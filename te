@@ -36,11 +36,12 @@
 # Values
 TMPDIR="${TMPDIR:-/tmp}"
 
+IFS='
+'
+
 ACTIONS="${1:-p}"
 ACTION="${ACTIONS%$REGISTER}"
-DATAS="${@#$ACTIONS}"
-
-[ -z "$DATAS" ] && DATAS=$(</dev/stdin) &
+DATAS="$@"
 
 REGISTER="${ACTIONS#?}"
 
@@ -52,8 +53,8 @@ case "$REGISTER" in
 esac
 
 TEMPORARY="${TERMINALEXPLORER_TEMPORARY:-$TMPDIR/terminal-explorer}"
-CLIPBOARD_SET_COMMAND="${TERMINALEXPLORER_CLIPBOARD_SET_COMMAND:-xclip -in  -selection clipboard}"
-CLIPBOARD_GET_COMMAND="${TERMINALEXPLORER_CLIPBOARD_GET_COMMAND:-xclip -out -selection clipboard}"
+CLIPBOARD_SET_COMMAND="${TERMINALEXPLORER_CLIPBOARD_SET_COMMAND:-clipb copy}"
+CLIPBOARD_GET_COMMAND="${TERMINALEXPLORER_CLIPBOARD_GET_COMMAND:-clipb paste}"
 COPY_COMMAND="${TERMINALEXPLORER_COPY_COMMAND:-cp}"
 CUT_COMMAND="${TERMINALEXPLORER_CUT_COMMAND:-mv}"
 
@@ -66,8 +67,21 @@ fi
 
 
 # Functions
+get_files_path() {
+	for file in "$@"; do
+		[ -z "$file" ] && continue
+
+		FILES_PATH="${FILES_PATH}file://$(hostname)$(realpath "$file")
+"
+	done
+}
+
 clipboard_files() {
-	FILES_PATH=$(realpath $DATAS | sed -e "s/^/file:\/\/$(hostname)/g" -e 's/$/\r/g')
+	if [ -p '/dev/stdin' ] && [ "$DATAS" = "$ACTIONS" ]; then
+		get_files_path $(cat -)
+	else
+		get_files_path "${@#$1}"
+	fi
 
 	if [ -z "$REGISTER" ]; then
 		eval "$CLIPBOARD_SET_COMMAND \"\$FILES_PATH\""
@@ -79,58 +93,56 @@ clipboard_files() {
 }
 
 move_files() {
-	for path in ${DATAS:-.}; do
-		if [ -z "$REGISTER" ]; then
-			FILES_PATH_RAW=$(eval "$CLIPBOARD_GET_COMMAND")
-		else
-			FILES_PATH_RAW=$(< "$TEMPORARY/registers/$REGISTER")
-		fi
+	if [ -z "$REGISTER" ]; then
+		FILES_PATH_RAW=$(eval "$CLIPBOARD_GET_COMMAND")
+	else
+		FILES_PATH_RAW=$(< "$TEMPORARY/registers/$REGISTER")
+	fi
 
-		[ "$1" = "$CUT_COMMAND" ] && [ -e "$ACTION_PATH" ] && rm "$ACTION_PATH"
+	printf "$FILES_PATH_RAW" | sed -e 's/^file:\/\/[^\/]*\//\//g' -e 's/\r$//g' > "$TEMPORARY/$$"
 
-		printf "$FILES_PATH_RAW" | sed -e 's/^file:\/\/[^\/]*\//\//g' -e 's/\r$//g' > "$TEMPORARY/files_path"
+	while IFS= read -r file_path || [ -n "$file_path" ]; do
+		[ ! -e "$file_path" ] && {
+			printf '%s' "te: '$file_path': No such file or directory"
 
-		while IFS= read -r file_path || [ -n "$file_path" ]; do
-			[ ! -e "$file_path" ] && {
-				printf '%s' "te: '$file_path': No such file or directory"
+			exit 1
+		}
+	done < "$TEMPORARY/$$"
 
-				exit 1
-			}
-		done < "$TEMPORARY/files_path"
+	while IFS= read -r file_path || [ -n "$file_path" ]; do
+		file_base=$(basename "$file_path")
+		file_move="$file_base"
 
-		while IFS= read -r file_path || [ -n "$file_path" ]; do
-			file_base=$(basename "$file_path")
-			file_move="$file_base"
+		copy='1'
 
-			i='1'
+		while [ -e "$path/$file_move" ]; do
+			copy=$(( i + 1 ))
 
-			while [ -e "$path/$file_move" ]; do
-				i=$(( i + 1 ))
+			file_move="$file_base ($copy)"
+		done
 
-				file_move="$file_base ($i)"
-			done
+		eval "$1 \"\$file_path\" \"./\$file_move\""
 
-			eval "$1 \"\$file_path\" \"\$path/\$file_move\""
-
-			DATAS="${DATAS:+$DATAS
+		files_move="${files_move:+$files_move
 }$file_move"
-		done < "$TEMPORARY/files_path"
+	done < "$TEMPORARY/$$"
 
-		[ "$1" = "$CUT_COMMAND" ] && clipboard_files 'copy'
-	done
+	rm "$TEMPORARY/$$"
+
+	[ "$1" = "$CUT_COMMAND" ] && clipboard_files 'copy' "$files_move"
 }
 
 
 # Start
 case "$ACTION" in
-	[cy]) clipboard_files 'copy'     ;;
-	[xd]) clipboard_files 'cut'      ;;
-	[ls]) clipboard_files 'symlink'  ;;
-	'h')  clipboard_files 'hardlink' ;;
-	[CY]) move_files "$COPY_COMMAND" ;;
-	[XD]) move_files "$CUT_COMMAND"  ;;
-	[LS]) move_files 'ln -s'         ;;
-	'H')  move_files 'ln'            ;;
+	[cy]) clipboard_files 'copy'     "${@#$ACTIONS}" ;;
+	[xd]) clipboard_files 'cut'      "${@#$ACTIONS}" ;;
+	[ls]) clipboard_files 'symlink'  "${@#$ACTIONS}" ;;
+	'h')  clipboard_files 'hardlink' "${@#$ACTIONS}" ;;
+	[CY]) move_files "$COPY_COMMAND"                 ;;
+	[XD]) move_files "$CUT_COMMAND"                  ;;
+	[LS]) move_files 'ln -s'                         ;;
+	'H')  move_files 'ln'                            ;;
 	[vpVP])
 		case $(< "$ACTION_PATH") in
 			'cut')      MOVE_COMMAND="$CUT_COMMAND"  ;;
@@ -139,7 +151,7 @@ case "$ACTION" in
 			*)          MOVE_COMMAND="$COPY_COMMAND" ;;
 		esac
 
-		move_files "$MOVE_COMMAND"
+		move_files "$MOVE_COMMAND" "${DATAS:-${@#$ACTIONS}}"
 	;;
 	*)
 		if [ "$ACTIONS" = '--help' ] || [ "$ACTIONS" = '-h' ]; then
@@ -148,7 +160,7 @@ mimic the way GUI's file manager do copy/cut/paste.
 
 \033[1mUsage:\033[0m
     te ACTION[REGISTER] FILES
-    te PASTE[REGISTER] [PATH]
+    te PASTE[REGISTER]
 
 \033[1mACTION:\033[0m
   c, y          copy FILES into REGISTER's clipboard and set paste's action to copy
@@ -158,12 +170,10 @@ mimic the way GUI's file manager do copy/cut/paste.
 
 \033[1mPASTE:\033[0m
   v, V, p, P    paste FILES from REGISTER's clipboard,
-  C, Y          ignore paste's action, copy     FILES from REGISTER's clipboard to PATH
-  X, D          ignore paste's action, cut      FILES from REGISTER's clipboard to PATH
-  L, S          ignore paste's action, symlink  FILES from REGISTER's clipboard to PATH
-  H             ignore paste's action, hardlink FILES from REGISTER's clipboard to PATH
-
-\033[1mPATH\033[0m by default is \$PWD.
+  C, Y          ignore paste's action, copy     FILES from REGISTER's clipboard
+  X, D          ignore paste's action, cut      FILES from REGISTER's clipboard
+  L, S          ignore paste's action, symlink  FILES from REGISTER's clipboard
+  H             ignore paste's action, hardlink FILES from REGISTER's clipboard
 
 \033[1mREGISTER\033[0m if leave empty will use system clipboard,
 otherwise it's name can be anything that doesn't include '/'.
