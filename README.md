@@ -52,7 +52,69 @@ te ACTION[REGISTER] FILES
 Or:
 
 ```sh
-te PASTE[REGISTER] FILES
+te PASTE[REGISTER] [PATH]
+```
+
+```console
+ACTION:
+  c, y          copy FILES into REGISTER's clipboard and set paste's action to copy
+  x, d          copy FILES into REGISTER's clipboard and set paste's action to cut
+  l, s          copy FILES into REGISTER's clipboard and set paste's action to symlink
+  h             copy FILES into REGISTER's clipboard and set paste's action to hardlink
+```
+
+```console
+PASTE:
+  v, V, p, P    paste FILES from REGISTER's clipboard,
+  C, Y          ignore paste's action, copy     FILES from REGISTER's clipboard to PATH
+  X, D          ignore paste's action, cut      FILES from REGISTER's clipboard to PATH
+  L, S          ignore paste's action, symlink  FILES from REGISTER's clipboard to PATH
+  H             ignore paste's action, hardlink FILES from REGISTER's clipboard to PATH
+
+PATH by default is $PWD.
+```
+
+```console
+REGISTER if leave empty will use system clipboard, otherwise it's name can be anything that doesn't include '/'.
+```
+
+Examples:
+
+```console
+~/
+├─ 1/
+├─ 2/
+├─ foo
+└─ bar
+```
+
+```sh
+cd ~/
+te x foo      # Cut foo
+te ctest bar  # Copy bar to 'test' register
+
+cd ~/1/
+te p      # Paste foo then copy ~/1/foo
+te ptest  # Paste bar from 'test' register
+te ptest  # Paste bar from 'test' register again
+
+cd ~/2/
+te p # Paste foo from ~/1/foo
+```
+
+Result:
+
+```console
+~/
+├─ 1/
+│ ├─ foo
+│ ├─ bar
+│ └─ bar (2)
+│
+├─ 2/
+│ └─ foo
+│
+└─ bar
 ```
 
 ## Configuration
@@ -69,7 +131,8 @@ Terminal explorer is configured through environment variables: `export TERMINALE
 
 ## Credits
 Special thanks to:
-- [**Pure sh bible**](https://github.com/dylanaraps/pure-sh-bible) also by [Dylan](https://github.com/dylanaraps)
+- [**File URI Specification**](https://www.freedesktop.org/wiki/Specifications/file-uri-spec) by [Freedesktop.org](https://www.freedesktop.org)
+- [**Desktop Trash Can Specification**](https://www.freedesktop.org/wiki/Specifications/trash-spec) also by [Freedesktop.org](https://www.freedesktop.org)
 
 <br><br><br><br>
 
