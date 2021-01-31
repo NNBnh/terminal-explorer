@@ -4,9 +4,13 @@
 <p align="center"><img src="https://img.shields.io/github/watchers/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=flat-square"> <img src="https://img.shields.io/github/stars/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=flat-square"> <img src="https://img.shields.io/github/forks/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=flat-square"> <img src="https://img.shields.io/github/issues/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=flat-square"></p>
 
 ## About
-**Terminal explorer** is a files manager tool that mimic the way GUI's file manager do copy/cut/paste.
+**Terminal explorer** is a files manager tool written in [`pure sh`](https://github.com/dylanaraps/pure-sh-bible) that mimic the way GUI's file manager do copy/cut/paste.
 
 ## Features
+- **Minimum**: with exactly [**256** lines of `sh`](https://github.com/NNBnh/terminal-explorer/blob/main/te#L256) and [minimum dependencies](#dependencies).
+- **Register**: you can operate in any specific register.
+- **Smart cut**: after cutting the file to a new path, the file's new path will be automatically copied for future operation.
+- **Customizable**: you can change the commands to set/get the clipboard, commands to copy/cut files, see more [here](#configuration).
 
 ## Contents
 - [About](#about)
@@ -22,6 +26,10 @@
 ## Setup
 ### Dependencies
 - `sh` to process
+- One of these clipboard managers:
+  - [`bclip`](https://github.com/NNBnh/bclip) clipboard managers warper
+  - [`wl-clipboard`](https://github.com/bugaevc/wl-clipboard) for [Wayland](https://wayland.freedesktop.org)
+  - [`xclip`](https://github.com/astrand/xclip) or [`xsel`](http://www.kfish.org/software/xsel) for [X.org](https://www.x.org)
 
 ### Installation
 #### Manually
@@ -122,12 +130,21 @@ Terminal explorer is configured through environment variables: `export TERMINALE
 
 |Value|Invalid|Default|Description|
 |-|-|-|-|
-|`CLIPBOARD_SET_COMMAND`|`<commands>`|`xclip -in -selection clipboard`|Command to set the clipboard|
-|`CLIPBOARD_GET_COMMAND`|`<commands>`|`xclip -out -selection clipboard`|Command to get the clipboard|
+|`CLIPBOARD_SET_COMMAND`|`<commands>`|`bclip copy`|Command to set the clipboard|
+|`CLIPBOARD_GET_COMMAND`|`<commands>`|`bclip paste`|Command to get the clipboard|
 |`TERMINALEXPLORER_COPY_COMMAND`|`<commands>`|`cp`|Command to copy files|
 |`TERMINALEXPLORER_CUT_COMMAND`|`<commands>`|`mv`|Command to cut files|
 |||||
-|`TERMINALEXPLORER_TEMPORARY`|`<path/to/file>`|`/tmp/bfetch`|Temporary file's location|
+|`TERMINALEXPLORER_TEMPORARY`|`<path/to/file>`|`/tmp/terminal-explorer`|Temporary file's location|
+
+Examples:
+
+```sh
+export CLIPBOARD_SET_COMMAND='xclip -in -selection clipboard'
+export CLIPBOARD_GET_COMMAND='xclip -out -selection clipboard'
+export TERMINALEXPLORER_COPY_COMMAND='rsync --recursive --archive -hh --partial --info=stats1 --info=progress2 --modify-window=1'
+export TERMINALEXPLORER_CUT_COMMAND='rsync --recursive --archive -hh --partial --info=stats1 --info=progress2 --modify-window=1 --remove-source-files'
+```
 
 ## Credits
 Special thanks to:
