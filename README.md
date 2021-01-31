@@ -27,7 +27,7 @@
 ### Dependencies
 - `sh` to process
 - One of these clipboard managers:
-  - [`bclip`](https://github.com/NNBnh/bclip) clipboard managers warper
+  - [`clipb`](https://github.com/NNBnh/clipb) clipboard managers warper
   - [`wl-clipboard`](https://github.com/bugaevc/wl-clipboard) for [Wayland](https://wayland.freedesktop.org)
   - [`xclip`](https://github.com/astrand/xclip) or [`xsel`](http://www.kfish.org/software/xsel) for [X.org](https://www.x.org)
 
@@ -130,8 +130,8 @@ Terminal explorer is configured through environment variables: `export TERMINALE
 
 |Value|Invalid|Default|Description|
 |-|-|-|-|
-|`CLIPBOARD_SET_COMMAND`|`<commands>`|`bclip copy`|Command to set the clipboard|
-|`CLIPBOARD_GET_COMMAND`|`<commands>`|`bclip paste`|Command to get the clipboard|
+|`CLIPBOARD_SET_COMMAND`|`<commands>`|`clipb copy`|Command to set the clipboard|
+|`CLIPBOARD_GET_COMMAND`|`<commands>`|`clipb paste`|Command to get the clipboard|
 |`TERMINALEXPLORER_COPY_COMMAND`|`<commands>`|`cp`|Command to copy files|
 |`TERMINALEXPLORER_CUT_COMMAND`|`<commands>`|`mv`|Command to cut files|
 |||||
