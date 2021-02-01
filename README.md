@@ -7,7 +7,7 @@
 **Terminal explorer** is a files manager tool written in [`pure sh`](https://github.com/dylanaraps/pure-sh-bible) that mimic the way GUI's file manager do copy/cut/paste.
 
 ## Features
-- **Minimum**: with exactly [**256** lines of `sh`](https://github.com/NNBnh/terminal-explorer/blob/main/te#L256) and [minimum dependencies](#dependencies).
+- **Minimum**: with exactly [**200** lines of `sh`](https://github.com/NNBnh/terminal-explorer/blob/main/te#L200) and [minimum dependencies](#dependencies).
 - **Register**: you can operate in any specific register.
 - **Smart cut**: after cutting the file to a new path, the file's new path will be automatically copied for future operation.
 - **Customizable**: you can change the commands to set/get the clipboard, commands to copy/cut files, see more [here](#configuration).
@@ -60,7 +60,7 @@ te ACTION[REGISTER] FILES
 Or:
 
 ```sh
-te PASTE[REGISTER]
+te PASTE[REGISTER] [COMMAND]
 ```
 
 ```console
@@ -73,7 +73,7 @@ ACTION:
 
 ```console
 PASTE:
-  v, V, p, P    paste FILES from REGISTER's clipboard,
+  v, V, p, P    paste FILES from REGISTER's clipboard, using custom COMMAND if defined
   C, Y          ignore paste's action, copy     FILES from REGISTER's clipboard
   X, D          ignore paste's action, cut      FILES from REGISTER's clipboard
   L, S          ignore paste's action, symlink  FILES from REGISTER's clipboard
