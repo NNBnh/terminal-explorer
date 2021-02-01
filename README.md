@@ -81,7 +81,8 @@ PASTE:
 ```
 
 ```console
-REGISTER if leave empty will use system clipboard, otherwise it's name can be anything that doesn't include '/'.
+REGISTER if leave empty will use system clipboard,
+otherwise it's name can be anything that doesn't include '/'.
 ```
 
 Examples:
