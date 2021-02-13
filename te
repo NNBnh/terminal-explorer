@@ -39,10 +39,10 @@ HOSTNAME="${HOSTNAME:-$(hostname)}"
 IFS='
 '
 
-ACTIONS="${1:-p}"
-ACTION="${ACTIONS%$REGISTER}"
 COMMAND="$*"
+ACTIONS="${1:-p}"
 REGISTER="${ACTIONS#?}"
+ACTION="${ACTIONS%$REGISTER}"
 
 case "$REGISTER" in
 	*'/'*)
