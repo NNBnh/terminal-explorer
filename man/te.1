@@ -1,0 +1,56 @@
+.TH TERMINAL-EXPLORER "1" "2021" "NNB" "User Commands"
+.SH NAME
+Terminal Explorer \- Bring file manager's copy/paste to the CLI
+.SH SYNOPSIS
+.B te ACTION[REGISTER] FILES
+.TP
+.B te PASTE[REGISTER] [COMMAND]
+.SH DESCRIPTION
+Terminal explorer is a files manager tool written in pure sh that mimic the way GUI's file manager do copy/cut/paste.
+.SH ACTION
+\fBc, y\fR
+copy FILES into REGISTER's clipboard and set paste's action to copy
+.TP
+\fBx, d\fR
+copy FILES into REGISTER's clipboard and set paste's action to cut
+.TP
+\fBl, s\fR
+copy FILES into REGISTER's clipboard and set paste's action to symlink
+.TP
+\fBh\fR
+copy FILES into REGISTER's clipboard and set paste's action to hardlink
+.SH PASTE
+\fBv, V, p, P\fR
+paste FILES from REGISTER's clipboard, using custom COMMAND if defined
+.TP
+\fBC, Y\fR
+ignore paste's action, copy     FILES from REGISTER's clipboard
+.TP
+\fBX, D\fR
+ignore paste's action, cut      FILES from REGISTER's clipboard
+.TP
+\fBL, S\fR
+ignore paste's action, symlink  FILES from REGISTER's clipboard
+.TP
+\fBH\fR
+ignore paste's action, hardlink FILES from REGISTER's clipboard
+.SH REGISTER
+If leave empty will use system clipboard,
+otherwise it's name can be anything that doesn't include '/'.
+.SH ENVIRONMENT VARIABLES
+\fBCLIPBOARD_SET_COMMAND\fR
+Command to set the clipboard (default: clipb copy)
+.TP
+\fBCLIPBOARD_GET_COMMAND\fR
+Command to get the clipboard (default: clipb paste)
+.TP
+\fBTERMINALEXPLORER_COPY_COMMAND\fR
+Command to copy files (default: cp)
+.TP
+\fBTERMINALEXPLORER_CUT_COMMAND\fR
+Command to cut files (default: mv)
+.TP
+\fBTERMINALEXPLORER_TEMPORARY\fR
+Temporary file's location (default: /tmp/terminal-explorer)
+.SH REPORTING BUGS
+Report bugs to https://github.com/NNBnh/terminal-explorer/issues

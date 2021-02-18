@@ -129,8 +129,8 @@ Terminal explorer is configured through environment variables: `export TERMINALE
 
 |Value|Invalid|Default|Description|
 |-|-|-|-|
-|`CLIPBOARD_SET_COMMAND`|`<commands>`|`clipb copy`|Command to set the clipboard|
-|`CLIPBOARD_GET_COMMAND`|`<commands>`|`clipb paste`|Command to get the clipboard|
+|`TERMINALEXPLORER_CLIPBOARD_SET_COMMAND`|`<commands>`|`clipb copy`|Command to set the clipboard|
+|`TERMINALEXPLORER_CLIPBOARD_GET_COMMAND`|`<commands>`|`clipb paste`|Command to get the clipboard|
 |`TERMINALEXPLORER_COPY_COMMAND`|`<commands>`|`cp`|Command to copy files|
 |`TERMINALEXPLORER_CUT_COMMAND`|`<commands>`|`mv`|Command to cut files|
 |||||
@@ -139,8 +139,8 @@ Terminal explorer is configured through environment variables: `export TERMINALE
 Examples:
 
 ```sh
-export CLIPBOARD_SET_COMMAND='xclip -in -selection clipboard'
-export CLIPBOARD_GET_COMMAND='xclip -out -selection clipboard'
+export TERMINALEXPLORER_CLIPBOARD_SET_COMMAND='xclip -in -selection clipboard'
+export TERMINALEXPLORER_CLIPBOARD_GET_COMMAND='xclip -out -selection clipboard'
 export TERMINALEXPLORER_COPY_COMMAND='rsync --recursive --archive -hh --partial --info=stats1 --info=progress2 --modify-window=1'
 export TERMINALEXPLORER_CUT_COMMAND='rsync --recursive --archive -hh --partial --info=stats1 --info=progress2 --modify-window=1 --remove-source-files'
 ```
