@@ -46,7 +46,7 @@ ACTION="${ACTIONS%$REGISTER}"
 
 case "$REGISTER" in
 	*'/'*)
-		printf '%s' "te: '$REGISTER': register's name mustn't include '/'"
+		printf '%s' "te: '$REGISTER': register's name mustn't include '/'" >&2
 		exit 1
 	;;
 esac
@@ -105,7 +105,7 @@ move_files() {
 
 	while IFS= read -r file_path || [ -n "$file_path" ]; do
 		[ ! -e "$file_path" ] && {
-			printf '%s' "te: '$file_path': No such file or directory"
+			printf '%s' "te: '$file_path': No such file or directory" >&2
 
 			exit 1
 		}
@@ -189,7 +189,7 @@ otherwise it's name can be anything that doesn't include '/'.
     te ptest"
 		else
 			printf '%s' "te: invalid actions -- '$ACTIONS'
-Try 'te --help' for more information."
+Try 'te --help' for more information." >&2
 
 			exit 1
 		fi
