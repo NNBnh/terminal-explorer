@@ -1,6 +1,6 @@
 {
   "name": "terminal-explorer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Bring file manager's copy/paste to the CLI",
   "global": "true",
   "scripts": ["bin/te"],

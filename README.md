@@ -7,7 +7,7 @@
 **Terminal explorer** is a files manager tool written in [`portable sh`](https://github.com/dylanaraps/pure-sh-bible) that mimic the way GUI's file manager do copy/cut/paste.
 
 ## Features
-- **Minimum**: with exactly [**200** lines of `sh`](https://github.com/NNBnh/terminal-explorer/blob/main/te#L200) and [minimum dependencies](#dependencies).
+- **Minimum**: with exactly [**269** lines of `sh`](https://github.com/NNBnh/terminal-explorer/blob/main/te#L200) and [minimum dependencies](#dependencies).
 - **Register**: you can operate in any specific register.
 - **Smart cut**: after cutting the file to a new path, the file's new path will be automatically copied for future operation.
 - **Customizable**: you can change the commands to set/get the clipboard, commands to copy/cut files, see more [here](#configuration).
@@ -160,6 +160,7 @@ export TERMINALEXPLORER_CUT_COMMAND='rsync --recursive --archive -hh --partial -
 ## Credits
 Special thanks to:
 - [**File URI Specification**](https://www.freedesktop.org/wiki/Specifications/file-uri-spec) by [Freedesktop.org](https://www.freedesktop.org)
+- [**SH-realpath**](https://github.com/mkropat/sh-realpath) by [Michael Kropat](https://github.com/mkropat)
 
 <br><br><br><br>
 
