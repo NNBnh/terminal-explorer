@@ -139,7 +139,7 @@ Result:
 ## Configuration
 Terminal explorer is configured through environment variables: `export TERMINALEXPLORER_<SETTING>="<value>"`
 
-|Value|Invalid|Default|Description|
+|Value|Validity|Default|Description|
 |-|-|-|-|
 |`TERMINALEXPLORER_CLIPBOARD_SET_COMMAND`|`<commands>`|`clipb copy`|Command to set the clipboard|
 |`TERMINALEXPLORER_CLIPBOARD_GET_COMMAND`|`<commands>`|`clipb paste`|Command to get the clipboard|
