@@ -1,3 +1,5 @@
+> **📢 [Check out the alternative flexible approach!](https://github.com/NNBnh/dots/wiki/files-manager#-copy-cut-link-delete-and-rename-items)**
+
 <h1 align="center"><i>Terminal Explorer</i></h1>
 <p align="center">Bring file manager's copy/paste to the CLI</p>
 <p align="center"><a href="https://github.com/NNBnh/terminal-explorer/blob/main/LICENSE"><img src="https://img.shields.io/github/license/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=for-the-badge" alt="License: GPL-3.0"></a> <a href="https://gist.github.com/NNBnh/9ef453aba3efce26046e0d3119dab5a7#development-completed"><img src="https://img.shields.io/badge/development-completed-%234EAA25.svg?labelColor=073551&style=for-the-badge&logoColor=FFFFFF" alt="Development completed"></a></p>
