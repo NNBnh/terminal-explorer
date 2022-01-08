@@ -36,12 +36,12 @@ ln -s ~/.local/share/terminal-explorer/bin/te ~/.local/bin/te
 ```
 
 #### 📦 Package manager
-For [`bpkg`](https://github.com/bpkg/bpkg) user:
+For [Bpkg](https://github.com/bpkg/bpkg) user:
 ```sh
 bpkg install NNBnh/terminal-explorer
 ```
 
-For [Basher](https://github.com/bpkg/bpkg) user:
+For [Basher](https://github.com/basherpm/basher) user:
 ```sh
 basher install NNBnh/terminal-explorer
 ```
