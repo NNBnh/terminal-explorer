@@ -1,4 +1,4 @@
-> **📢 [Check out the alternative flexible approach!](https://github.com/NNBnh/dots/wiki/files-manager#-copy-cut-link-delete-and-rename-items)**
+> **📢 [Check out the alternative flexible approach!](https://github.com/NNBnh/dotfiles/wiki/files-manager#-copy-cut-link-delete-and-rename-items)**
 
 <h1 align="center"><i>Terminal Explorer</i></h1>
 <p align="center">Bring file manager's copy/paste to the CLI</p>
