@@ -5,16 +5,20 @@
 <p align="center"><a href="https://github.com/NNBnh/terminal-explorer/blob/main/LICENSE"><img src="https://img.shields.io/github/license/NNBnh/terminal-explorer?labelColor=073551&color=4EAA25&style=for-the-badge" alt="License: GPL-3.0"></a> <a href="https://gist.github.com/NNBnh/9ef453aba3efce26046e0d3119dab5a7#development-completed"><img src="https://img.shields.io/badge/development-completed-%234EAA25.svg?labelColor=073551&style=for-the-badge&logoColor=FFFFFF" alt="Development completed"></a></p>
 
 ## 💡 About
+
 **Terminal explorer** is a files manager tool written in [`portable sh`](https://github.com/dylanaraps/pure-sh-bible) that mimic the way GUI's file manager do copy/cut/paste.
 
 ## ✨ Features
+
 - **Minimum**: with exactly [**269** lines of `sh`](https://github.com/NNBnh/terminal-explorer/blob/main/te#L200) and [minimum dependencies](#dependencies).
 - **Register**: you can operate in any specific register.
 - **Smart cut**: after cutting the file to a new path, the file's new path will be automatically copied for future operation.
 - **Customizable**: you can change the commands to set/get the clipboard, commands to copy/cut files, see more [here](#configuration).
 
 ## 🚀 Setup
+
 ### 🧾 Dependencies
+
 - [Unix commands](https://en.wikipedia.org/wiki/List_of_Unix_commands) to process
 - A clipboard managers like:
   - [`clipb`](https://github.com/NNBnh/clipb) clipboard managers warper
@@ -22,39 +26,49 @@
   - [`xclip`](https://github.com/astrand/xclip) or [`xsel`](http://www.kfish.org/software/xsel) for [X.org](https://www.x.org)
 
 ### 📥 Installation
+
 #### 🔧 Manually
+
 Option 1: using `curl`
+
 ```sh
 curl https://raw.githubusercontent.com/NNBnh/terminal-explorer/main/bin/te > ~/.local/bin/te
 chmod +x ~/.local/bin/te
 ```
 
 Option 2: using `git`
+
 ```sh
 git clone https://github.com/NNBnh/terminal-explorer.git ~/.local/share/terminal-explorer
 ln -s ~/.local/share/terminal-explorer/bin/te ~/.local/bin/te
 ```
 
 #### 📦 Package manager
+
 For [Bpkg](https://github.com/bpkg/bpkg) user:
+
 ```sh
 bpkg install NNBnh/terminal-explorer
 ```
 
 For [Basher](https://github.com/basherpm/basher) user:
+
 ```sh
 basher install NNBnh/terminal-explorer
 ```
 
-> *If you can and want to port Terminal explorer to other package managers, feel free to do so.*
+> **Note** *If you can and want to port Terminal explorer to other package managers, feel free to do so.*
 
 ## ⌨️ Usage
+
 Run `te` in the terminal:
+
 ```sh
 te ACTION[REGISTER] FILES
 ```
 
 or:
+
 ```sh
 te PASTE[REGISTER] [COMMAND]
 ```
@@ -82,6 +96,7 @@ otherwise it's name can be anything that doesn't include '/'.
 ```
 
 Examples:
+
 ```console
 ~/
 ├─ 1/
@@ -105,6 +120,7 @@ te p # Paste foo from ~/1/foo
 ```
 
 Result:
+
 ```console
 ~/
 ├─ 1/
@@ -119,7 +135,9 @@ Result:
 ```
 
 ## ⚙️ Configuration
+
 Terminal explorer is configured through environment variables: `export TERMINALEXPLORER_<SETTING>="<value>"`
+
 |Value|Validity|Default|Description|
 |-|-|-|-|
 |`TERMINALEXPLORER_CLIPBOARD_SET_COMMAND`|`<commands>`|`clipb copy`|Command to set the clipboard|
@@ -130,6 +148,7 @@ Terminal explorer is configured through environment variables: `export TERMINALE
 |`TERMINALEXPLORER_TEMPORARY`|`<path/to/file>`|`/tmp/terminal-explorer`|Temporary file's location|
 
 Examples:
+
 ```sh
 export TERMINALEXPLORER_CLIPBOARD_SET_COMMAND='xclip -in -selection clipboard'
 export TERMINALEXPLORER_CLIPBOARD_GET_COMMAND='xclip -out -selection clipboard'
@@ -138,6 +157,7 @@ export TERMINALEXPLORER_CUT_COMMAND='rsync --recursive --archive -hh --partial -
 ```
 
 ## 💌 Credits
+
 Special thanks to:
 - [**File URI Specification**](https://www.freedesktop.org/wiki/Specifications/file-uri-spec) by [Freedesktop.org](https://www.freedesktop.org)
 - [**SH-realpath**](https://github.com/mkropat/sh-realpath) by [Michael Kropat](https://github.com/mkropat)
