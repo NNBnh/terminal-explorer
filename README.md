@@ -10,7 +10,7 @@
 
 ## ✨ Features
 
-- **Minimum**: with exactly [**269** lines of `sh`](https://github.com/NNBnh/terminal-explorer/blob/main/te#L200) and [minimum dependencies](#dependencies).
+- **Minimum**: with exactly [**269** lines of `sh`](https://github.com/NNBnh/terminal-explorer/blob/main/bin/te) and [minimum dependencies](#dependencies).
 - **Register**: you can operate in any specific register.
 - **Smart cut**: after cutting the file to a new path, the file's new path will be automatically copied for future operation.
 - **Customizable**: you can change the commands to set/get the clipboard, commands to copy/cut files, see more [here](#configuration).
