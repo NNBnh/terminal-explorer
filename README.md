@@ -6,7 +6,7 @@
 
 ## 💡 About
 
-**Terminal explorer** is a files manager tool written in [`portable sh`](https://github.com/dylanaraps/pure-sh-bible) that mimic the way GUI's file manager do copy/cut/paste.
+**Terminal explorer** is a files manager tool written in [`portable sh`](https://github.com/dylanaraps/pure-sh-bible) that mimics the way GUI's file manager do copy/cut/paste.
 
 ## ✨ Features
 
